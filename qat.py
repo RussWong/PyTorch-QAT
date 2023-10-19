@@ -384,7 +384,7 @@ def main():
 
     # Print FP32 model.
     print(model)
-    # Print fused model.
+    # Print fused model. note: 这个时候并没有融合在一起，只是通过一个wrapper把这三个算子包在了一起
     print(fused_model)
 
     # Model and fused model should be equivalent.
