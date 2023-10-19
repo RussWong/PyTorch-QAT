@@ -366,7 +366,7 @@ def main():
     # Otherwise the quantization aware training will not work correctly.
     fused_model.train()
 
-    # Fuse the model in place rather manually.
+    # Fuse the model. why? because bn and relu does not have their own int8 kernel!!
     fused_model = torch.quantization.fuse_modules(fused_model,
                                                   [["conv1", "bn1", "relu"]],
                                                   inplace=True)
