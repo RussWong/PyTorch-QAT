@@ -422,7 +422,7 @@ def main():
     # https://pytorch.org/docs/stable/_modules/torch/quantization/quantize.html#prepare_qat
     torch.quantization.prepare_qat(quantized_model, inplace=True)
 
-    # # Use training data for calibration.
+    
     print("Training QAT Model...")
     quantized_model.train()
     train_model(model=quantized_model,
@@ -433,10 +433,9 @@ def main():
                 num_epochs=10)
     quantized_model.to(cpu_device)
 
-    # Using high-level static quantization wrapper
-    # The above steps, including torch.quantization.prepare, calibrate_model, and torch.quantization.convert, are also equivalent to
-    # quantized_model = torch.quantization.quantize_qat(model=quantized_model, run_fn=train_model, run_args=[train_loader, test_loader, cuda_device], mapping=None, inplace=False)
-
+    # 1.no calib any more, only need to fetch scale and zp from fakequant , then store into quant and dequant
+    # 2. wrapper(conv + bn + relu) => QuantizedConvAndRelu
+    # 3. get int8 model(quantized_model)
     quantized_model = torch.quantization.convert(quantized_model, inplace=True)
 
     quantized_model.eval()
